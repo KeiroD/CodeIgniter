@@ -65,7 +65,7 @@ Step 3: Replace config/mimes.php
 ********************************
 
 This config file has been updated to contain more user mime-types, please copy
-it to _application/config/mimes.php*.
+it to *application/config/mimes.php*.
 
 **************************************************************
 Step 4: Remove $autoload['core'] from your config/autoload.php
@@ -206,13 +206,13 @@ Step 8: Replace your error templates
 ************************************
 
 In CodeIgniter 3.0, the error templates are now considered as views and have been moved to the
-_application/views/errors* directory.
+*application/views/errors* directory.
 
 Furthermore, we've added support for CLI error templates in plain-text format that unlike HTML,
 is suitable for the command line. This of course requires another level of separation.
 
-It is safe to move your old templates from _application/errors* to _application/views/errors/html*,
-but you'll have to copy the new _application/views/errors/cli* directory from the CodeIgniter archive.
+It is safe to move your old templates from *application/errors* to *application/views/errors/html*,
+but you'll have to copy the new *application/views/errors/cli* directory from the CodeIgniter archive.
 
 ******************************************
 Step 9: Update your config/routes.php file
@@ -842,7 +842,6 @@ CodeIgniter 3.1+.
 .. note:: This method is still available, but you're strongly encouraged to remove its usage
 	sooner rather than later.
 
-======================
 The Javascript library
 ======================
 
@@ -854,8 +853,27 @@ It is now deprecated and scheduled for removal in CodeIgniter 3.1+.
 .. note:: This library is still available, but you're strongly encouraged to remove its usage
 	sooner rather than later.
 
+Form Validation method prep_for_form()
+======================================
+
+The :doc:`Form Validation Library <../libraries/form_validation>` has a
+``prep_for_form()`` method, which is/can also be used as a rule in
+``set_rules()`` to automatically perform HTML encoding on input data.
+
+Automatically encoding input (instead of output) data is a bad practice in
+the first place, and CodeIgniter and PHP itself offer other alternatives
+to this method anyway.
+For example, :doc:`Form Helper <../helpers/form_helper>` functions will
+automatically perform HTML escaping when necessary.
+
+Therefore, the *prep_for_form* method/rule is pretty much useless and is now
+deprecated and scheduled for removal in 3.1+.
+
+.. note:: The method is still available, but you're strongly encouraged to
+	remove its usage sooner rather than later.
+
 ***********************************************************
-Step 20: Check your usage of Text helper highlight_phrase()
+Step 21: Check your usage of Text helper highlight_phrase()
 ***********************************************************
 
 The default HTML tag used by :doc:`Text Helper <../helpers/text_helper>` function
