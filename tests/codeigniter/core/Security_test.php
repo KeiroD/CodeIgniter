@@ -270,6 +270,12 @@ class Security_test extends CI_TestCase {
 
 		$this->assertEquals('<div>Hello <b>Booya</b></div>', $decoded);
 
+		$this->assertEquals('colon:',    $this->security->entity_decode('colon&colon;'));
+		$this->assertEquals("NewLine\n", $this->security->entity_decode('NewLine&NewLine;'));
+		$this->assertEquals("Tab\t",     $this->security->entity_decode('Tab&Tab;'));
+		$this->assertEquals("lpar(",     $this->security->entity_decode('lpar&lpar;'));
+		$this->assertEquals("rpar)",     $this->security->entity_decode('rpar&rpar;'));
+
 		// Issue #3057 (https://github.com/bcit-ci/CodeIgniter/issues/3057)
 		$this->assertEquals(
 			'&foo should not include a semicolon',
@@ -299,7 +305,8 @@ class Security_test extends CI_TestCase {
 			'<img src="mdn-logo-sm.png" alt="MD Logo" srcset="mdn-logo-HD.png 2x, mdn-logo-small.png 15w, mdn-banner-HD.png 100w 2x" />',
 			'<img sqrc="/img/sunset.gif" height="100%" width="100%">',
 			'<img srqc="/img/sunset.gif" height="100%" width="100%">',
-			'<img srcq="/img/sunset.gif" height="100%" width="100%">'
+			'<img srcq="/img/sunset.gif" height="100%" width="100%">',
+			'<img src=non-quoted.attribute foo="bar">'
 		);
 
 		$urls = array(
@@ -310,7 +317,8 @@ class Security_test extends CI_TestCase {
 			'mdn-logo-sm.png',
 			'<img sqrc="/img/sunset.gif" height="100%" width="100%">',
 			'<img srqc="/img/sunset.gif" height="100%" width="100%">',
-			'<img srcq="/img/sunset.gif" height="100%" width="100%">'
+			'<img srcq="/img/sunset.gif" height="100%" width="100%">',
+			'non-quoted.attribute'
 		);
 
 		for ($i = 0; $i < count($imgtags); $i++)
