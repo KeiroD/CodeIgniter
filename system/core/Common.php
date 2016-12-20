@@ -81,8 +81,7 @@ if ( ! function_exists('is_really_writable'))
 	 * Tests for file writability
 	 *
 	 * is_writable() returns TRUE on Windows servers when you really can't write to
-	 * the file, based on the read-only attribute. is_writable() is also unreliable
-	 * on Unix servers if safe_mode is on.
+	 * the file, based on the read-only attribute.
 	 *
 	 * @link	https://bugs.php.net/bug.php?id=54709
 	 * @param	string
@@ -90,8 +89,8 @@ if ( ! function_exists('is_really_writable'))
 	 */
 	function is_really_writable($file)
 	{
-		// If we're on a Unix server with safe_mode off we call is_writable
-		if (DIRECTORY_SEPARATOR === '/' && (is_php('5.4') OR ! ini_get('safe_mode')))
+		// If we're on a UNIX-like server, just is_writable()
+		if (DIRECTORY_SEPARATOR === '/')
 		{
 			return is_writable($file);
 		}
@@ -544,13 +543,18 @@ if ( ! function_exists('set_status_header'))
 				416	=> 'Requested Range Not Satisfiable',
 				417	=> 'Expectation Failed',
 				422	=> 'Unprocessable Entity',
+				426	=> 'Upgrade Required',
+				428	=> 'Precondition Required',
+				429	=> 'Too Many Requests',
+				431	=> 'Request Header Fields Too Large',
 
 				500	=> 'Internal Server Error',
 				501	=> 'Not Implemented',
 				502	=> 'Bad Gateway',
 				503	=> 'Service Unavailable',
 				504	=> 'Gateway Timeout',
-				505	=> 'HTTP Version Not Supported'
+				505	=> 'HTTP Version Not Supported',
+				511	=> 'Network Authentication Required',
 			);
 
 			if (isset($stati[$code]))
@@ -598,7 +602,7 @@ if ( ! function_exists('_error_handler'))
 	 */
 	function _error_handler($severity, $message, $filepath, $line)
 	{
-		$is_error = (((E_ERROR | E_COMPILE_ERROR | E_CORE_ERROR | E_USER_ERROR) & $severity) === $severity);
+		$is_error = (((E_ERROR | E_PARSE | E_COMPILE_ERROR | E_CORE_ERROR | E_USER_ERROR) & $severity) === $severity);
 
 		// When an error occurred, set the status header to '500 Internal Server Error'
 		// to indicate to the client something went wrong.
@@ -656,6 +660,7 @@ if ( ! function_exists('_exception_handler'))
 		$_error =& load_class('Exceptions', 'core');
 		$_error->log_exception('error', 'Exception: '.$exception->getMessage(), $exception->getFile(), $exception->getLine());
 
+		is_cli() OR set_status_header(500);
 		// Should we display the error?
 		if (str_ireplace(array('off', 'none', 'no', 'false', 'null'), '', ini_get('display_errors')))
 		{

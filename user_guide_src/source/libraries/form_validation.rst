@@ -1009,7 +1009,6 @@ to use:
 ==================== ========= ==============================================================================================================
 Name                 Parameter Description
 ==================== ========= ==============================================================================================================
-**prep_for_form**    No        DEPRECATED: Converts special characters so that HTML data can be shown in a form field without breaking it.
 **prep_url**         No        Adds "\http://" to URLs if missing.
 **strip_image_tags** No        Strips the HTML from image tags leaving the raw URL.
 **encode_php_tags**  No        Converts PHP tags to entities.
@@ -1027,12 +1026,14 @@ Class Reference
 
 .. php:class:: CI_Form_validation
 
-	.. php:method:: set_rules($field[, $label = ''[, $rules = '']])
+	.. php:method:: set_rules($field[, $label = null[, $rules = null[, $errors = array()]]])
 
 		:param	string	$field: Field name
 		:param	string	$label: Field label
 		:param	mixed	$rules: Validation rules, as a string list separated by a pipe "|", or as an array or rules
+		:param	array	$errors: A list of custom error messages
 		:returns:	CI_Form_validation instance (method chaining)
+		:throws:	BadMethodCallException	If $field is not an array and $rules was not used
 		:rtype:	CI_Form_validation
 
 		Permits you to set validation rules, as described in the tutorial
